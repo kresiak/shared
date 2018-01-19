@@ -8,22 +8,15 @@ export class WebSocketService{
 
     constructor(@Inject(DataStore) private dataStore: DataStore, @Inject(ConfigService) private configService: ConfigService)
     {
-        if (configService.isProduction()) {
-            if (configService.isVM2()) { 
-                this.url =    'ws://139.165.57.34:80'
-            }
-            else {
-                this.url =    'ws://139.165.56.57:3002'
-            }
-        }
-        else {
-            this.url =   'ws://localhost:1337';
-        }
+    }
+
+    private getUrl()  {
+        return this.configService.isProduction() ? 'ws://139.165.57.34:80' : 'ws://localhost:1337'
     }
 
     
+    
     ws: WebSocket;
-    private url; 
 
     init() {
         this.createObservableSocket().subscribe(data => {
@@ -42,7 +35,7 @@ export class WebSocketService{
 
     private createObservableSocket():Observable<any>{
 
-        this.ws = new WebSocket(this.url);
+        this.ws = new WebSocket(this.getUrl());
 
         return new Observable(
           observer => {
