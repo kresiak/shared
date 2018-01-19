@@ -53,16 +53,4 @@ export class ConfigService {
         return n != -1 ? n : defaultNb
     }
 
-
-    getTranslationWord(key: string): Observable<string> {
-        return Observable.combineLatest(this.translate.get(key), this.translate.onLangChange.startWith(undefined), (translation, event: LangChangeEvent) => {
-            if (! event) return translation || key
-            var keyArr= key.split('.')
-            var value= keyArr.reduce((acc, key) => {
-                return acc ? acc[key] : undefined
-            }, event.translations)
-            return value || key
-        })
-    }
-
 }
