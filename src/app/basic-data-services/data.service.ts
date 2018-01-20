@@ -70,6 +70,10 @@ export class DataStore { // contains one observable property by database table/c
         return this.apiService.getUrlBaseForUpload()
     }
 
+    public getPictureUrlBase() {
+        return this.apiService.getPictureUrlBase()
+    }
+
     public setLaboName(labo: string) {
         this.laboName = labo ? labo : 'undefined'
         localStorage.setItem(this.LSLaboKey, labo)
