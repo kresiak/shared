@@ -1,4 +1,5 @@
-import * as moment from "moment"
+import * as moment_ from "moment"
+const moment = moment_;    // to avoid error: https://github.com/jvandemo/generator-angular2-library/issues/221
 
 export function isDateIntervalCompatibleWithNow(datStart: string, datEnd: string) {
     var now = moment()
