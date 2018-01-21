@@ -27,7 +27,7 @@
                 <input *ngIf="showSearch" style="width: 600px;" type="search" [formControl]="searchControl" formControlName="searchControl"
                     [ngbPopover]="searchPopContent" placement="right" triggers="mouseenter:mouseleave" popoverTitle="{{'UI.GENERAL.HOW TO SEARCH' | translate}}"><img
                     *ngIf="showSearch" src="images/close.png" (click)="resetSearchControl()" />
-                <span *ngIf="nbHits && moneyTotal" class="gg-price">{{'  ' + moneyTotal | currency:'EUR':true}} {{'UI.GENERAL.IN' | translate}}</span>
+                <span *ngIf="nbHits && moneyTotal" class="gg-price">{{'  ' + moneyTotal | currency:'EUR':'symbol'}} {{'UI.GENERAL.IN' | translate}}</span>
                 <span *ngIf="nbHits" class="gg-price">{{nbHits}} {{objectTypeTranslationKey | translate}}	</span>&nbsp;
                 <span *ngIf="explainedComplexQuery" [ngbTooltip]="'UI.GENERAL.SEARCH HELP.EXPLAINED COMPLEXQUERY TIP' | translate" [innerHtml]="explainedComplexQuery">	</span>
             </div>
