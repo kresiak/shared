@@ -36,7 +36,7 @@
 
         <div class="card" *ngIf="(objects || []).length === 0">
             <div class="card-body">
-                <div class="centertextbox">{{'UI.GENERAL.HITS.NO HIT TEXT' | translate:{param:objectTypeText} }}</div>
+                <div class="centertextbox">{{'UI.GENERAL.HITS.NO HIT TEXT' | translate:{param:(objectTypeTranslationKey | translate)} }}</div>
             </div>
         </div>
 

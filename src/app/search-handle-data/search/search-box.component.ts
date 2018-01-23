@@ -103,11 +103,7 @@ export class SearchBoxComponent implements OnInit {
                 this.objects = comparatorsUtils.clone(o)
             this.listChanged.next(this.objects)
         })
-
-/*         this.translationLoaderService.getTranslationWord(this.objectTypeTranslationKey).takeWhile(() => this.isPageRunning).subscribe(txt => {
-            this.objectTypeText = txt
-        })
- */    }
+    }
 
     isPageRunning: boolean = true
 
