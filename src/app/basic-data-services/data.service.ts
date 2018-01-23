@@ -50,9 +50,9 @@ export class DataStore { // contains one observable property by database table/c
 
     private universalTables: string[] = ['products', 'suppliers', 'categories', 'labos.list', 'otp.product.classifications', 'sap.engage', 'sap.fusion', 'sap.supplier', 'sap.engage.map', 'users.public',
         'products.market', 'platform.enterprises', 'platform.clients', 'currencies', 'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams',
-        'users.eurisko', 'job.request', 'job.response', 'dashlets.eurisko'
+        'users.eurisko', 'job.request', 'job.response', 'job.publicationChannels', 'dashlets.eurisko'
     ]
-
+    
     //public laboName= 'demo' 
     //public laboName = 'michel'
     private laboName: string = 'undefined' // = 'genomics'
