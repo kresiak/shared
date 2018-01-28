@@ -1,0 +1,21 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-lg-4 col-md-2 align-self-center">
+				<a href="#">
+					<img src="images/GIGAlogo.png" />
+				</a>
+				<a href="#">
+					<img id="ulgLogo" src="images/ULglogo.gif" />
+				</a>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3 align-self-center">
+				<h1 style="text-align:center">{{title}}</h1>
+			</div>
+			<div class="col-lg-2 col-md-1 d-none d-md-block align-self-center">
+			</div>
+			<ng-content select="[login]"></ng-content>
+		</div>
+		<ng-content select="[scrolling]"></ng-content>
+	</div>
+</div>

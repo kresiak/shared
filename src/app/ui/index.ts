@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ImageUploadModule } from "angular2-image-upload"
@@ -34,6 +35,8 @@ import { GigaCurrencyPipe } from './pipes/ggcurrency.pipe'
 
 import { FocusDirective } from './directives/focus.directive'
 
+import {MainHeaderComponent} from './application/main.header.component'
+import {MenuComponent} from './application/menu.component'
 
 import { ModalConfirmComponent } from './modal/modal-confirm.component'
 
@@ -49,11 +52,12 @@ import { locale as french } from './locale/fr'
 
 @NgModule({
   imports: [
-    ImageUploadModule.forRoot(),
+    ImageUploadModule.forRoot(), RouterModule,
     Ng2AutoCompleteModule, NgbModule, CommonModule, TranslateModule.forChild(),
     FormsModule, ReactiveFormsModule
   ],
   declarations: [
+    MainHeaderComponent, MenuComponent,
     Editor, EditorNumber, EditorDate, EditorBoolean, Checkbox, CheckboxDelete, ButtonActionConfirm, SelectorComponent, EditorAutocomplete, EditorAutocompleteText,
     SimpleTinyComponent, EditorTinyMce,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
@@ -61,6 +65,7 @@ import { locale as french } from './locale/fr'
     FocusDirective, SigninEnterComponent, LinesTooltipComponent
   ],
   exports: [
+    MainHeaderComponent, MenuComponent,
     Editor, EditorNumber, EditorDate, EditorBoolean, Checkbox, CheckboxDelete, ButtonActionConfirm, SelectorComponent, EditorAutocomplete, EditorAutocompleteText,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     SimpleTinyComponent, EditorTinyMce,
