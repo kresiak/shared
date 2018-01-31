@@ -8,8 +8,12 @@ import { UploadMetadata, FileHolder, ImageUploadComponent } from "angular2-image
 export class ImageUploaderComponent {
 
     @Input() maxNbOfFiles = 5
-    @Input() uploadUrl: string    
-    @Output() imagesChanged= new EventEmitter()
+    @Input() uploadUrl: string 
+    @Input() buttonCaptionKey = 'UI.UPLOAD.SELECT IMAGES'
+    @Input() dropBoxMessageKey = 'UI.UPLOAD.DROP YOUR IMAGES HERE'
+    @Input() clearButtonCaptionKey = 'UI.UPLOAD.CLEAR'
+    @Input() extensions = [] // default value will make it possible to drop all file types and open the file explorer for all file types
+    @Output() imagesChanged = new EventEmitter()
 
     @ViewChild(ImageUploadComponent) imageUploadComponent: ImageUploadComponent;
 
@@ -59,8 +63,9 @@ export class ImageUploaderComponent {
         }
         var ab = this.createOurFileObj(metadata.file)
         var x = JSON.stringify(ab)
-        if (this.fileDocuments.map(f => JSON.stringify(f.file)).includes(x))
+        if (this.fileDocuments.map(f => JSON.stringify(f.file)).includes(x)) {
             metadata.abort = true
+        }
 
         return metadata;
     };

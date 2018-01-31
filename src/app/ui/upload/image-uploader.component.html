@@ -1,4 +1,4 @@
 <image-upload [url]="uploadUrl" (uploadFinished)="onUploadFinished($event)" [beforeUpload]="onBeforeUpload"
-    (removed)="onRemoved($event)" [buttonCaption]="'UI.UPLOAD.SELECT IMAGES' | translate" [dropBoxMessage]="'UI.UPLOAD.DROP YOUR IMAGES HERE' | translate"
-    [clearButtonCaption]="'UI.UPLOAD.CLEAR' | translate" [max]="maxNbOfFiles"> 
+    (removed)="onRemoved($event)" [buttonCaption]="buttonCaptionKey | translate" [dropBoxMessage]="dropBoxMessageKey | translate"
+    [clearButtonCaption]="clearButtonCaptionKey | translate" [max]="maxNbOfFiles" [extensions]="extensions"> 
 </image-upload>
