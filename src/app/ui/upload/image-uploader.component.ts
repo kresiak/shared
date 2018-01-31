@@ -25,6 +25,8 @@ export class ImageUploaderComponent {
 
     public fileDocuments: any[] = []
 
+    private hasBeenCleared: boolean= false
+
     public getServerFileName(res) {
         var x = JSON.parse(res.serverResponse._body)
         var filename = x ? x.filename : 'unknown'
@@ -32,18 +34,21 @@ export class ImageUploaderComponent {
     }
 
     public clearPictures() {
+        this.hasBeenCleared= true
+        this.fileDocuments= []
         this.imageUploadComponent.deleteAll()
     }
     
     public onUploadFinished(res) {
+        this.hasBeenCleared= false
         var filename = this.getServerFileName(res)
 
-        this.fileDocuments.push(
-            {
-                file: this.createOurFileObj(res.file),
-                filename: filename
-            }
-        )
+        var newRecord= {
+            file: this.createOurFileObj(res.file),
+            filename: filename
+        }
+
+        this.fileDocuments.push(newRecord)
         this.imagesChanged.next(this.fileDocuments)
     }
 
@@ -61,6 +66,7 @@ export class ImageUploaderComponent {
     };
 
     public onRemoved(res: FileHolder) {
+        if (this.hasBeenCleared) return // if the client of this component has asked for a reset of the uploads, he is not interested in getting these events and fileDocuments has already been reset to empty
         var filename = this.getServerFileName(res)
         var theFile = this.fileDocuments.filter(fn => fn.filename === filename)[0]
         if (theFile) {
