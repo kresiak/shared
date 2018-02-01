@@ -83,10 +83,10 @@ export class DataStore { // contains one observable property by database table/c
         this.emitLaboName()
     }
 
-    private isFromRightLabo(table, rec): boolean {
+    private isFromRightLabo(table: string, rec): boolean {
         let laboNameInRecord = rec[this.laboFieldName]
 
-        if ((this.universalTables.includes(table) || table.includes('xenia')) && !rec.isLabo) return true
+        if ((this.universalTables.includes(table) || table.includes('xenia') || table.startsWith('screens.')) && !rec.isLabo) return true
 
         if (this.laboName === 'michel') return !laboNameInRecord || laboNameInRecord === this.laboName
         return laboNameInRecord === this.laboName
