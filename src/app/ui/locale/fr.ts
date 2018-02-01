@@ -7,12 +7,10 @@ export const locale = {
             "CLICKER TEXTE": "Clicker dans le champ texte et écrire une lettre ou deux; vous recevrez des suggestions",
             "CHECKBOX DELETE": {
                 "OBJECT": "objet",
-                "CLICK HERE TO SELECT THE": "clicker ici pour spécifier que le (la)",
-                "FOR DELETION": "va être supprimé(e)",
-                "CAREFUL THIS WILL": "Attention! Cette action va supprimer le (la)",
-                "IF YOU ARE SURE": ", ce qui ne peut pas être annulé. Clicker ici, si vous êtes certain de vouloir supprimer.",
-                "DELETE": "Supprimer",
-                "CANCEL": "Annuler"
+                "WARNING1": "clicker ici pour {{action}} le(la) {{type}}.",
+                "WARNING2": "Attention! Cette action va {{action}} le/la {{type}}. Clicker ici, si vous êtes certain de vouloir le faire.",               
+                "DELETE": "supprimer",
+                "CANCEL": "annuler"
             },
             "ACTION BUTTON": {
                 "ACTION": "action",

@@ -12,6 +12,7 @@ import {
 })
 export class CheckboxDelete {
     @Input() typeObjectKey: string= 'UI.CHECKBOX DELETE.OBJECT';
+    @Input() actionKey: string= 'UI.CHECKBOX DELETE.DELETE';
     @Output() doDelete = new EventEmitter();
 
     public isDueToDelete: boolean= false
