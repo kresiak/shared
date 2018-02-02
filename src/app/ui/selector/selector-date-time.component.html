@@ -1,0 +1,33 @@
+<ng-template #mymodal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">{{'UI.GENERAL.PLEASE CHOOSE' | translate}}</h4>
+        <button type="button" class="close" (click)="d('Cross click')" [ngbTooltip]="'UI.GENERAL.CHANGES LOST' | translate" placement="bottom-left">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <ngb-datepicker #dp [(ngModel)]="dateModel" [displayMonths]="2"></ngb-datepicker>
+                </div>
+                <div class="row">
+                    <ngb-timepicker [(ngModel)]="timeModel"></ngb-timepicker>
+                </div>
+                <div class="row">
+                    {{fromDateTimePickerDateObject(dateModel, timeModel)}}
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="c('Close click')">{{'UI.GENERAL.SAVE' | translate}}</button>
+        <button type="button" class="btn btn-warning" (click)="d('Cancel click')">{{'UI.GENERAL.CANCEL' | translate}}</button>
+    </div>
+</ng-template>
+
+<div class="editor__output" *ngIf="content">{{content | fullDate}}</div>
+<div class="editor__output" *ngIf="!content">{{'UI.GENERAL.NOT SET YET' | translate}}</div>
+<div *ngIf="!readOnly && !editMode" class="editor__controls">
+    <button (click)="openModal(mymodal)" class="editor__icon-edit"></button>
+</div>

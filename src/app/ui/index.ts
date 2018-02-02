@@ -22,6 +22,8 @@ import { SimpleTinyComponent } from './editor/editor-wysiwyg'
 import { EditorTinyMce } from './editor/editor-tnymce'
 
 import { SelectorComponent } from './selector/selector.component'
+import { SelectorDateTimeComponent } from './selector/selector-date-time.component'
+
 import { HelpPointerComponent } from './help/help-pointer.component'
 import { DatePointerComponent } from './help/date-pointer.component'
 import { TextCompactComponent } from './help/text-compact.component'
@@ -62,7 +64,8 @@ import { locale as french } from './locale/fr'
     SimpleTinyComponent, EditorTinyMce,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
-    FocusDirective, SigninEnterComponent, LinesTooltipComponent
+    FocusDirective, SigninEnterComponent, LinesTooltipComponent,
+    SelectorDateTimeComponent
   ],
   exports: [
     MainHeaderComponent, MenuComponent,
@@ -71,7 +74,8 @@ import { locale as french } from './locale/fr'
     SimpleTinyComponent, EditorTinyMce,
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, GigaCurrencyPipe,
     ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
-    FocusDirective, SigninEnterComponent, LinesTooltipComponent
+    FocusDirective, SigninEnterComponent, LinesTooltipComponent,
+    SelectorDateTimeComponent
   ],
   providers: [],
   entryComponents: [
