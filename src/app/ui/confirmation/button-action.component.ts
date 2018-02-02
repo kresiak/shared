@@ -13,6 +13,7 @@ import {
 export class ButtonActionConfirm {
     @Input() typeObjectKey: string= 'UI.CHECKBOX DELETE.OBJECT';
     @Input() typeActionKey: string= 'UI.ACTION BUTTON.ACTION';
+    @Input() showWarning: boolean= true
     @Output() doAction = new EventEmitter();
 
     public isDueToAct: boolean= false
