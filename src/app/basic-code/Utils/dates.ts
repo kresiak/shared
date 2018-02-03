@@ -8,6 +8,13 @@ export function isDateIntervalCompatibleWithNow(datStart: string, datEnd: string
     return d1 && d2 && d1.isSameOrBefore(now) && now.isBefore(d2) 
 }
 
+export function isDateIntervalCompatibleWithNowLiberal(datStart: string, datEnd: string) {
+    var now = moment()
+    var d1 = datStart ? moment(datStart, 'DD/MM/YYYY HH:mm:ss').startOf('day') : moment().add(-1, 'day')
+    var d2 = datEnd ? moment(datEnd, 'DD/MM/YYYY HH:mm:ss').add(1, 'day').startOf('day') : moment().add(1, 'day')
+    return d1 && d2 && d1.isSameOrBefore(now) && now.isBefore(d2) 
+}
+
 export function isDateAfterNow(datEnd: string) {
     var now = moment()
     var d2 = moment(datEnd, 'DD/MM/YYYY HH:mm:ss').add(1, 'day').startOf('day')
