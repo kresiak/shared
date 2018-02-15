@@ -67,7 +67,8 @@ export const locale = {
                 "IN": "in", //as
                 "ADD THE CHOICE": "Add the choice", //as
                 "ENTER NEW CHOICE": "Enter new choice...", //as
-                "PLEASE CHOOSE": "Please choose"
+                "PLEASE CHOOSE": "Please choose",
+                "CHOOSE COUNTRY": "Choose a country"
             }
 
         }

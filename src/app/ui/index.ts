@@ -11,6 +11,7 @@ import { ImageUploadModule } from "angular2-image-upload"
 import { Editor } from './editor/editor'
 import { EditorAutocomplete } from './editor/editor-autocomplete'
 import { EditorAutocompleteText } from './editor/editor-autocomplete-text'
+import { EditorAutocompleteCountry } from './editor/editor-autocomplete-country'
 import { EditorNumber } from './editor/editor-number'
 import { EditorDate } from './editor/editor-date'
 import { EditorBoolean } from './editor/editor-boolean'
@@ -61,6 +62,7 @@ import { locale as french } from './locale/fr'
   declarations: [
     MainHeaderComponent, MenuComponent,
     Editor, EditorNumber, EditorDate, EditorBoolean, Checkbox, CheckboxDelete, ButtonActionConfirm, SelectorComponent, EditorAutocomplete, EditorAutocompleteText,
+    EditorAutocompleteCountry,
     SimpleTinyComponent, EditorTinyMce,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
@@ -70,6 +72,7 @@ import { locale as french } from './locale/fr'
   exports: [
     MainHeaderComponent, MenuComponent,
     Editor, EditorNumber, EditorDate, EditorBoolean, Checkbox, CheckboxDelete, ButtonActionConfirm, SelectorComponent, EditorAutocomplete, EditorAutocompleteText,
+    EditorAutocompleteCountry,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     SimpleTinyComponent, EditorTinyMce,
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, GigaCurrencyPipe,

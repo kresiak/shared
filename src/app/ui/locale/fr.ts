@@ -67,7 +67,8 @@ export const locale = {
                 "IN": "dans",
                 "ENTER NEW CHOICE": "Entrer une nouvelle option...",
                 "PLEASE CHOOSE": "Veuillez choisir",
-                "ADD THE CHOICE": "Ajouter l'option"
+                "ADD THE CHOICE": "Ajouter l'option",
+                "CHOOSE COUNTRY": "Choisir un pays"
             }
 
 
