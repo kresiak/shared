@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FormItemType, FormItemStructure } from './form-data.class'
+import { SelectorComponent } from '../selector/selector.component'
 
 @Component(
     {
@@ -12,24 +13,30 @@ import { FormItemType, FormItemStructure } from './form-data.class'
 export class FormGenericComponent implements OnInit {
 
     public newForm: FormGroup= new FormGroup({});
+    public errorMessage: string= ''
 
     constructor(private formBuilder: FormBuilder) {
     }
 
+    @ViewChildren(SelectorComponent) selectorViewChildren: QueryList<SelectorComponent>
+
     FormItemType: typeof FormItemType = FormItemType;        // Necessary: see https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates 
 
     @Input() structure: FormItemStructure[]= []
-    @Input() labelColumns: number= 4
-    @Input() dataColumns: number= 5
+    @Input() labelColumns: number= 3
+    @Input() dataColumns: number= 4
     @Output() formSaved = new EventEmitter()    
+
+    public validatorColumns: number= 5
 
     showValidation: boolean= false
 
     ngOnInit(): void {
-        const emailRegex = /^[0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3}\s*$/i;
-        const telRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+        const emailRegex = /^\s*[0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3}\s*$/i;
+        const telRegex = /^\s*[\+0]{1}[0-9]{7,20}\s*$/im
         //const priceRegEx = `^\\d+(.\\d*)?$`
 
+        this.validatorColumns= 12 - this.labelColumns - this.dataColumns
         this.structure.filter(s => s.isStandard()).forEach(s => {
             var validators= []
             if (s.isRequired) validators.push(Validators.required)
@@ -43,16 +50,24 @@ export class FormGenericComponent implements OnInit {
     save(formValue, isValid) {
         this.showValidation= true
         if (!isValid) return
+        var retObj= {}
         this.structure.filter(s => s.isStandard()).forEach(s => {
             var value= formValue[s.name]
             if (s.type === FormItemType.InputNumber) value= +value
-            s.value= value
+            if (s.type === FormItemType.InputText) value= (value || '').trim()
+            retObj[s.name]= value
         })
-        this.formSaved.next(this.structure)
+        this.structure.filter(s => !s.isStandard()).forEach(s => {
+            retObj[s.name]= s.value
+        })
+        retObj['setError']= (msg) => {this.errorMessage=msg}
+        retObj['setSuccess']= (msg) => {this.reset()}
+        this.formSaved.next(retObj)
     }
 
     reset() {
         this.showValidation= false
+        this.selectorViewChildren.toArray().forEach(s => s.emptyContent())
         this.newForm.reset();
     }    
 
@@ -60,5 +75,10 @@ export class FormGenericComponent implements OnInit {
         var control= this.newForm.controls[controlName]
         if (!control) return true
         return !control.valid
+    }
+
+    fieldChanged(controlName, value) {
+        var control= this.structure.filter(s => s.name === controlName)[0]
+        if (control) control.value= value
     }
 }

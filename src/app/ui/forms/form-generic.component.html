@@ -1,13 +1,23 @@
 <div class="container-fluid">
     <form [formGroup]="newForm" (ngSubmit)="save(newForm.value, newForm.valid)">
+        <div class="form-group row" *ngIf="errorMessage" [style.color]="'red'">{{errorMessage | translate}}</div>
         <div class="form-group row" *ngFor="let item of structure">
-            <label for="{{item.name}}" class="col-sm-{{labelColumns}}">{{item.labelKey | translate}}</label>
+            <label for="{{item.name}}" class="col-sm-{{labelColumns}}">{{item.labelKey | translate}}:</label>
             <div class="col-sm-{{dataColumns}}" [ngSwitch]="item.type">
-                <input *ngSwitchCase="FormItemType.InputText" type="text" class="form-control" [formControlName]="item.name" [id]="item.name" placeholder="{{item.placeholderKey | translate}}">
-                <input *ngSwitchCase="FormItemType.InputCheckbox" type="checkbox" class="form-control isCheckbox" [formControlName]="item.name" [id]="item.name">
-                <input *ngSwitchCase="FormItemType.InputNumber" type="number" [min]="(item.options || {}).minNumber || 0" step="any" class="form-control" [formControlName]="item.name" [id]="item.name" placeholder="{{item.placeholderKey | translate}}">
+                <input *ngSwitchCase="FormItemType.InputText" type="text" class="form-control" [formControlName]="item.name" [id]="item.name"
+                    placeholder="{{item.placeholderKey | translate}}">
+                <input *ngSwitchCase="FormItemType.InputCheckbox" type="checkbox" class="form-control isCheckbox" [formControlName]="item.name"
+                    [id]="item.name">
+                <input *ngSwitchCase="FormItemType.InputNumber" type="number" [min]="(item.options || {}).minNumber || 0" step="any" class="form-control"
+                    [formControlName]="item.name" [id]="item.name" placeholder="{{item.placeholderKey | translate}}">
+                <gg-selector *ngSwitchCase="FormItemType.GigaSelector" [selectableData]="(item.options || {}).selectableData || []" (selectionChanged)="fieldChanged(item.name, $event)"></gg-selector>
             </div>
-            <div *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">!!!</div>
+            <div class="col-sm-{{validatorColumns}}" *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">
+                <span *ngIf="item.isRequired">{{'UI.FORM.REQUIRED' | translate}}</span>
+                <span *ngIf="item.minimalLength">{{'UI.FORM.MIN CHAR REQUIRED' | translate:{nb:item.minimalLength} }}</span>
+                <span *ngIf="item.isEmail">{{'UI.FORM.EMAIL FORMAT ERROR' | translate}}</span>
+                <span *ngIf="item.isTelephone">{{'UI.FORM.TEL FORMAT ERROR' | translate}}</span>
+            </div>
         </div>
 
         <div class="form-group row">

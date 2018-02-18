@@ -10,14 +10,14 @@ export class FormItemStructure
     minimalLength:  number = 0
     isEmail: boolean = false
     isTelephone: boolean = false
-    otpions: any = {}
+    options: any = {}
 
     constructor(name: string, labelKey: string, type: FormItemType, options: any= {})
     {
         this.name= name
         this.labelKey= labelKey
         this.type= type
-        this.otpions= options
+        this.options= options
         if (options.isRequired) this.isRequired=true
         if (options.minimalLength) this.minimalLength=options.minimalLength
         if (options.isEmail) this.isEmail=true
@@ -27,6 +27,7 @@ export class FormItemStructure
         else this.placeholderKey=this.labelKey
         if (options.tooltipKey) this.tooltipKey= options.tooltipKey
         // other valid option (only for input number): minNumber
+        // other valid option (only for selector): selectableData
     }
 
     public isStandard() : boolean {

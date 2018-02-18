@@ -49,7 +49,11 @@ export const locale = {
             },
             "FORM": {
                 "SUBMIT": "Envoyer",
-                "RESET": "Réinitialiser"
+                "RESET": "Réinitialiser",
+                "REQUIRED": "Information obligatoire!",
+                "MIN CHAR REQUIRED": "Au moins {{nb}} caractère(s).",
+                "TEL FORMAT ERROR": "Doit contenir seulement des chiffres (au moins 7), sans espaces. Doit commencer par '+' ou '0'",
+                "EMAIL FORMAT ERROR": "Doit être une adresse e-mail."
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "le format n'est pas valide",

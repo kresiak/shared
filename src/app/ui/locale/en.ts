@@ -48,8 +48,12 @@ export const locale = {
                 "ERROR": "There is an error. Try again."
             },
             "FORM": {
-                "SUBMIT": "Submit", //as
-                "RESET": "Reset"  //as
+                "SUBMIT": "Submit", 
+                "RESET": "Reset",
+                "REQUIRED": "Required information!",
+                "MIN CHAR REQUIRED": "At least {{nb}} characters.",
+                "TEL FORMAT ERROR": "Must be composed of at least 7 numbers, without spaces. May start by '+'or '0'",
+                "EMAIL FORMAT ERROR": "Must be an e-mail address."
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "the format is not valid", //as
