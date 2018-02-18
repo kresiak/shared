@@ -50,6 +50,8 @@ import { SigninEnterComponent } from './login/signin-enter.component'
 
 import { ConfirmationService} from './confirmation/confirmation.service'
 
+import { FormGenericComponent } from './forms/form-generic.component'
+
 import { locale as english } from './locale/en'
 import { locale as french } from './locale/fr'
 
@@ -67,7 +69,8 @@ import { locale as french } from './locale/fr'
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
-    SelectorDateTimeComponent
+    SelectorDateTimeComponent,
+    FormGenericComponent
   ],
   exports: [
     MainHeaderComponent, MenuComponent,
@@ -78,7 +81,8 @@ import { locale as french } from './locale/fr'
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, GigaCurrencyPipe,
     ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
-    SelectorDateTimeComponent
+    SelectorDateTimeComponent,
+    FormGenericComponent
   ],
   providers: [],
   entryComponents: [
@@ -115,3 +119,4 @@ export interface ILocale {
 
 export {Editor} from './editor/editor'
 export * from './confirmation/confirmation.service'
+export * from './forms/form-data.class'
