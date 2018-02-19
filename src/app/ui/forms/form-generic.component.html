@@ -18,8 +18,8 @@
 
                 <gg-editor-date *ngSwitchCase="FormItemType.GigaDate" [content]="" (editSaved)="fieldChanged(item.name, $event)"></gg-editor-date>
 
-                <gg-editor-autocomplete *ngSwitchCase="FormItemType.GigaOptions" [timeoutSeconds]="4" [selectableData]="(item.options || {}).selectableData || []"
-                    [selectedId]="item.value" (idChanged)="fieldChanged(item.name, $event)"></gg-editor-autocomplete>
+                <gg-editor-autocomplete *ngSwitchCase="FormItemType.GigaOptions" [timeoutSeconds]="2" [selectableData]="(item.options || {}).selectableData || []"
+                    [selectedId]="item.value" [emptyContentText]="'UI.FORM.CHOOSE AN OPTION' | translate" (idChanged)="fieldChanged(item.name, $event)"></gg-editor-autocomplete>
 
                 <span *ngIf="(item.name===primaryControlName) && alreadyInDb" [style.color]="'red'">{{'UI.FORM.ALREADY IN DB' | translate}}</span>
             </div>

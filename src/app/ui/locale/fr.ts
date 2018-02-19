@@ -56,7 +56,8 @@ export const locale = {
                 "EMAIL FORMAT ERROR": "Doit être une adresse e-mail.",
                 "NUMBER REQUIRED": "Une valeur numérique est attendue. Pas de texte.",
                 "NUMBER MINIMAL": "Valeur minimale: {{nb}}",
-                "ALREADY IN DB": "Cette entrée existe déjà dans la base de données. Veuillez vérifier si c'est nécessaire de la recréer."
+                "ALREADY IN DB": "Cette entrée existe déjà dans la base de données. Veuillez vérifier si c'est nécessaire de la recréer.",
+                "CHOOSE AN OPTION": "Choisir une option"
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "le format n'est pas valide",

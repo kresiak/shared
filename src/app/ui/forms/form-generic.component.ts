@@ -32,6 +32,8 @@ export class FormGenericComponent implements OnInit {
     @Input() primaryDataObservable: Observable<any>= undefined
     @Output() formSaved = new EventEmitter()    
 
+    @Output() gigaControlChanged = new EventEmitter()    
+    
     public validatorColumns: number= 5
 
     showValidation: boolean= false
@@ -109,5 +111,14 @@ export class FormGenericComponent implements OnInit {
     fieldChanged(controlName, value) {
         var control= this.structure.filter(s => s.name === controlName)[0]
         if (control) control.value= value
+        this.gigaControlChanged.next({
+            name: controlName,
+            value: value,
+            fnChangeControl: (_controlName, _value) => {
+                var obj: any= {}
+                obj[_controlName]= _value
+                this.newForm.patchValue(obj)
+            }
+        })
     }
 }

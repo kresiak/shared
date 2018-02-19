@@ -50,7 +50,7 @@ export class EditorAutocomplete implements OnInit {
             .switchMap((term: string) => {
                 return this.selectableData.map(sd => !term ? sd : sd.filter(item => item.name.toLowerCase().includes(term.toLowerCase())).slice(0, 10))
             })
-            .do(x => console.log(x))
+            //.do(x => console.log(x))
 
     formatter = (x: { name: string }) => {
         return x.name

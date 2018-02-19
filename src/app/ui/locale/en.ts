@@ -56,7 +56,8 @@ export const locale = {
                 "EMAIL FORMAT ERROR": "Must be an e-mail address.",
                 "NUMBER REQUIRED": "A numeric value is expected. No text.",
                 "NUMBER MINIMAL": "Minimum value: {{nb}}",
-                "ALREADY IN DB": "This already exists in the database. Please check if it is necessary to create it."
+                "ALREADY IN DB": "This already exists in the database. Please check if it is necessary to create it.",
+                "CHOOSE AN OPTION": "Choose an option"
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "the format is not valid", //as
