@@ -1,7 +1,8 @@
 <div class="container-fluid">
     <form [formGroup]="newForm" (ngSubmit)="save(newForm.value, newForm.valid)">
         <div class="form-group row" *ngIf="errorMessage" [style.color]="'red'">{{errorMessage | translate}}</div>
-        <div class="form-group row" *ngFor="let item of structure">
+        <div class="form-group row" *ngFor="let item of structure" [ngbTooltip]="item.tooltipKey ? (item.tooltipKey | translate) : ''">
+
             <label for="{{item.name}}" class="col-sm-{{labelColumns}} align-self-center">{{item.labelKey | translate}}:</label>
             <div class="col-sm-{{dataColumns}} align-self-center" [ngSwitch]="item.type">
 
