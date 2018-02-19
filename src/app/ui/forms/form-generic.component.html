@@ -12,8 +12,9 @@
                     [formControlName]="item.name" [id]="item.name" placeholder="{{item.placeholderKey | translate}}">
                 <gg-selector *ngSwitchCase="FormItemType.GigaSelector" [selectableData]="(item.options || {}).selectableData || []" (selectionChanged)="fieldChanged(item.name, $event)"></gg-selector>
                 <gg-editor-date *ngSwitchCase="FormItemType.GigaDate" [content]="" (editSaved)="fieldChanged(item.name, $event)"></gg-editor-date>
+                <span *ngIf="(item.name===primaryControlName) && alreadyInDb" [style.color]="'red'">{{'UI.FORM.ALREADY IN DB' | translate}}</span>
             </div>
-            <div class="col-sm-{{validatorColumns}}" *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">
+            <div class="col-sm-{{validatorColumns}}" *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">                
                 <span *ngIf="item.isRequired">{{'UI.FORM.REQUIRED' | translate}}</span>
                 <span *ngIf="item.minimalLength">{{'UI.FORM.MIN CHAR REQUIRED' | translate:{nb:item.minimalLength} }}</span>
                 <span *ngIf="item.isEmail">{{'UI.FORM.EMAIL FORMAT ERROR' | translate}}</span>

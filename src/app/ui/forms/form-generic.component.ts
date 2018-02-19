@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FormItemType, FormItemStructure } from './form-data.class'
 import { SelectorComponent } from '../selector/selector.component'
 import { EditorDate } from '../editor/editor-date'
+import { Observable } from 'rxjs/Observable';
 
 @Component(
     {
@@ -27,11 +28,15 @@ export class FormGenericComponent implements OnInit {
     @Input() structure: FormItemStructure[]= []
     @Input() labelColumns: number= 3
     @Input() dataColumns: number= 4
+    @Input() primaryControlName: string= 'name'
+    @Input() primaryDataObservable: Observable<any>= undefined
     @Output() formSaved = new EventEmitter()    
 
     public validatorColumns: number= 5
 
     showValidation: boolean= false
+
+    public isPageRunning: boolean = true
 
     ngOnInit(): void {
         const emailRegex = /^\s*[0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3}\s*$/i;
@@ -47,8 +52,27 @@ export class FormGenericComponent implements OnInit {
             if (s.isTelephone) validators.push(Validators.pattern(telRegex))
             this.newForm.addControl(s.name, new FormControl(s.value, validators))
         })
+
+        this.initCheck()
     }
 
+    public alreadyInDb: boolean= false
+
+    private initCheck() {
+        if (!this.primaryDataObservable) return
+        this.newForm.controls[this.primaryControlName].valueChanges.debounceTime(400).distinctUntilChanged().startWith('').takeWhile(() => this.isPageRunning)
+            .switchMap(catName => {
+                return this.primaryDataObservable.map(list => list.filter(element => element.toUpperCase().trim() === (catName || '').toUpperCase().trim())[0]).takeWhile(() => this.isPageRunning)
+            })
+            .subscribe(similarCategory => {
+                this.alreadyInDb = similarCategory !== undefined
+            })
+    }
+
+    ngOnDestroy(): void {
+        this.isPageRunning = false
+    }
+    
     save(formValue, isValid) {
         this.showValidation= true
         if (!isValid) return
@@ -73,6 +97,7 @@ export class FormGenericComponent implements OnInit {
         this.selectorViewChildren.toArray().forEach(s => s.emptyContent())
         this.datesViewChildren.toArray().forEach(s => s.emptyContent())
         this.newForm.reset();
+        this.initCheck()
     }    
 
     isInvalid(controlName): boolean {

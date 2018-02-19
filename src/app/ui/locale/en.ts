@@ -55,7 +55,8 @@ export const locale = {
                 "TEL FORMAT ERROR": "Must be composed of at least 7 numbers, without spaces. May start by '+'or '0'",
                 "EMAIL FORMAT ERROR": "Must be an e-mail address.",
                 "NUMBER REQUIRED": "A numeric value is expected. No text.",
-                "NUMBER MINIMAL": "Minimum value: {{nb}}"
+                "NUMBER MINIMAL": "Minimum value: {{nb}}",
+                "ALREADY IN DB": "This already exists in the database. Please check if it is necessary to create it."
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "the format is not valid", //as
