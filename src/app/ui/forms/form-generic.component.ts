@@ -67,7 +67,7 @@ export class FormGenericComponent implements OnInit {
                 return this.primaryDataObservable.map(list => list.filter(element => element.toUpperCase().trim() === (catName || '').toUpperCase().trim())[0]).takeWhile(() => this.isPageRunning)
             })
             .subscribe(similarCategory => {
-                this.alreadyInDb = similarCategory !== undefined
+                this.alreadyInDb = similarCategory !== undefined && similarCategory !== ''
             })
     }
 
