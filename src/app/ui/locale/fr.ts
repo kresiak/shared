@@ -53,7 +53,9 @@ export const locale = {
                 "REQUIRED": "Information obligatoire!",
                 "MIN CHAR REQUIRED": "Au moins {{nb}} caractère(s).",
                 "TEL FORMAT ERROR": "Doit contenir seulement des chiffres (au moins 7), sans espaces. Doit commencer par '+' ou '0'",
-                "EMAIL FORMAT ERROR": "Doit être une adresse e-mail."
+                "EMAIL FORMAT ERROR": "Doit être une adresse e-mail.",
+                "NUMBER REQUIRED": "Une valeur numérique est attendu. Pas de texte.",
+                "NUMBER MINIMAL": "Valeur minimale: {{nb}}"
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "le format n'est pas valide",

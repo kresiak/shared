@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ViewChildren, QueryList
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FormItemType, FormItemStructure } from './form-data.class'
 import { SelectorComponent } from '../selector/selector.component'
+import { EditorDate } from '../editor/editor-date'
 
 @Component(
     {
@@ -19,6 +20,7 @@ export class FormGenericComponent implements OnInit {
     }
 
     @ViewChildren(SelectorComponent) selectorViewChildren: QueryList<SelectorComponent>
+    @ViewChildren(EditorDate) datesViewChildren: QueryList<EditorDate>
 
     FormItemType: typeof FormItemType = FormItemType;        // Necessary: see https://stackoverflow.com/questions/35923744/pass-enums-in-angular2-view-templates 
 
@@ -55,6 +57,7 @@ export class FormGenericComponent implements OnInit {
             var value= formValue[s.name]
             if (s.type === FormItemType.InputNumber) value= +value
             if (s.type === FormItemType.InputText) value= (value || '').trim()
+            if (s.type === FormItemType.InputCheckbox) value= value !== '' && value !== null
             retObj[s.name]= value
         })
         this.structure.filter(s => !s.isStandard()).forEach(s => {
@@ -68,6 +71,7 @@ export class FormGenericComponent implements OnInit {
     reset() {
         this.showValidation= false
         this.selectorViewChildren.toArray().forEach(s => s.emptyContent())
+        this.datesViewChildren.toArray().forEach(s => s.emptyContent())
         this.newForm.reset();
     }    
 
