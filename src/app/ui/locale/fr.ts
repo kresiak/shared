@@ -54,7 +54,7 @@ export const locale = {
                 "MIN CHAR REQUIRED": "Au moins {{nb}} caractère(s).",
                 "TEL FORMAT ERROR": "Doit contenir seulement des chiffres (au moins 7), sans espaces. Doit commencer par '+' ou '0'",
                 "EMAIL FORMAT ERROR": "Doit être une adresse e-mail.",
-                "NUMBER REQUIRED": "Une valeur numérique est attendu. Pas de texte.",
+                "NUMBER REQUIRED": "Une valeur numérique est attendue. Pas de texte.",
                 "NUMBER MINIMAL": "Valeur minimale: {{nb}}",
                 "ALREADY IN DB": "Cette entrée existe déjà dans la base de données. Veuillez vérifier si c'est nécessaire de la recréer."
             },

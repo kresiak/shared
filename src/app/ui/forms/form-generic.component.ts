@@ -59,7 +59,7 @@ export class FormGenericComponent implements OnInit {
     public alreadyInDb: boolean= false
 
     private initCheck() {
-        if (!this.primaryDataObservable) return
+        if (!this.primaryDataObservable || !this.newForm.controls[this.primaryControlName]) return
         this.newForm.controls[this.primaryControlName].valueChanges.debounceTime(400).distinctUntilChanged().startWith('').takeWhile(() => this.isPageRunning)
             .switchMap(catName => {
                 return this.primaryDataObservable.map(list => list.filter(element => element.toUpperCase().trim() === (catName || '').toUpperCase().trim())[0]).takeWhile(() => this.isPageRunning)

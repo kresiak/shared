@@ -2,19 +2,31 @@
     <form [formGroup]="newForm" (ngSubmit)="save(newForm.value, newForm.valid)">
         <div class="form-group row" *ngIf="errorMessage" [style.color]="'red'">{{errorMessage | translate}}</div>
         <div class="form-group row" *ngFor="let item of structure">
-            <label for="{{item.name}}" class="col-sm-{{labelColumns}}">{{item.labelKey | translate}}:</label>
-            <div class="col-sm-{{dataColumns}}" [ngSwitch]="item.type">
+            <label for="{{item.name}}" class="col-sm-{{labelColumns}} align-self-center">{{item.labelKey | translate}}:</label>
+            <div class="col-sm-{{dataColumns}} align-self-center" [ngSwitch]="item.type">
+
                 <input *ngSwitchCase="FormItemType.InputText" type="text" class="form-control" [formControlName]="item.name" [id]="item.name"
                     placeholder="{{item.placeholderKey | translate}}">
+
                 <input *ngSwitchCase="FormItemType.InputCheckbox" type="checkbox" class="form-control isCheckbox" [formControlName]="item.name"
                     [id]="item.name">
+
                 <input *ngSwitchCase="FormItemType.InputNumber" type="number" [min]="(item.options || {}).minNumber || 0" step="any" class="form-control"
                     [formControlName]="item.name" [id]="item.name" placeholder="{{item.placeholderKey | translate}}">
+
                 <gg-selector *ngSwitchCase="FormItemType.GigaSelector" [selectableData]="(item.options || {}).selectableData || []" (selectionChanged)="fieldChanged(item.name, $event)"></gg-selector>
+
                 <gg-editor-date *ngSwitchCase="FormItemType.GigaDate" [content]="" (editSaved)="fieldChanged(item.name, $event)"></gg-editor-date>
+
+                <gg-editor-autocomplete *ngSwitchCase="FormItemType.GigaOptions" [timeoutSeconds]="4" [selectableData]="(item.options || {}).selectableData || []"
+                    [selectedId]="item.value" (idChanged)="fieldChanged(item.name, $event)"></gg-editor-autocomplete>
+
                 <span *ngIf="(item.name===primaryControlName) && alreadyInDb" [style.color]="'red'">{{'UI.FORM.ALREADY IN DB' | translate}}</span>
             </div>
-            <div class="col-sm-{{validatorColumns}}" *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">                
+            <div class="col-sm-{{validatorColumns}} align-self-center" *ngIf="showValidation && item.type===FormItemType.GigaOptions && item.isRequired && !item.value" [style.color]="'red'">
+                {{'UI.FORM.REQUIRED' | translate}}
+            </div>
+            <div class="col-sm-{{validatorColumns}} align-self-center" *ngIf="showValidation && item.isStandard() && isInvalid(item.name)" [style.color]="'red'">
                 <span *ngIf="item.isRequired">{{'UI.FORM.REQUIRED' | translate}}</span>
                 <span *ngIf="item.minimalLength">{{'UI.FORM.MIN CHAR REQUIRED' | translate:{nb:item.minimalLength} }}</span>
                 <span *ngIf="item.isEmail">{{'UI.FORM.EMAIL FORMAT ERROR' | translate}}</span>

@@ -27,7 +27,7 @@ export class FormItemStructure
         else this.placeholderKey=this.labelKey
         if (options.tooltipKey) this.tooltipKey= options.tooltipKey
         // other valid option (only for input number): minNumber
-        // other valid option (only for selector): selectableData
+        // other valid option (only for selector and GigaOptions ): selectableData
     }
 
     public isStandard() : boolean {
@@ -41,5 +41,6 @@ export enum FormItemType {
     InputNumber = 2,
     GigaSelector = 21,
     GigaDate = 22,
-    GigaCountry = 23
+    GigaCountry = 23,
+    GigaOptions = 24
 }
