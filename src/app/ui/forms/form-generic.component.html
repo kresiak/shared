@@ -42,7 +42,7 @@
                 <button class="btn btn-success" type="submit" [disabled]="showValidation && !newForm.valid">{{'UI.FORM.SUBMIT' | translate}}</button>
             </div>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <button class="btn btn-info" [disabled]="false" (click)="reset()">{{'UI.FORM.RESET' | translate}}</button>
+                <button type="button" class="btn btn-info" [disabled]="false" (click)="reset()">{{'UI.FORM.RESET' | translate}}</button>
             </div>
         </div>
     </form>
