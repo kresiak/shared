@@ -42,6 +42,7 @@ import {MainHeaderComponent} from './application/main.header.component'
 import {MenuComponent} from './application/menu.component'
 
 import { ModalConfirmComponent } from './modal/modal-confirm.component'
+import { ModalMessageComponent } from './modal/modal-message.component'
 
 import { ImageUploaderComponent } from './upload/image-uploader.component'
 import { ImageUploaderViewerComponent } from './upload/image-uploader-viewer.component'
@@ -67,7 +68,7 @@ import { locale as french } from './locale/fr'
     EditorAutocompleteCountry,
     SimpleTinyComponent, EditorTinyMce,
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
-    FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
+    FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
     SelectorDateTimeComponent,
     FormGenericComponent
@@ -79,14 +80,14 @@ import { locale as french } from './locale/fr'
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     SimpleTinyComponent, EditorTinyMce,
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, GigaCurrencyPipe,
-    ModalConfirmComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
+    ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
     SelectorDateTimeComponent,
     FormGenericComponent
   ],
   providers: [],
   entryComponents: [
-    ModalConfirmComponent
+    ModalConfirmComponent, ModalMessageComponent
   ],
   bootstrap: []
 })

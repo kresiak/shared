@@ -4,6 +4,7 @@ import { FormItemType, FormItemStructure } from './form-data.class'
 import { SelectorComponent } from '../selector/selector.component'
 import { EditorDate } from '../editor/editor-date'
 import { Observable } from 'rxjs/Observable';
+import { ConfirmationService } from '../confirmation/confirmation.service'
 
 @Component(
     {
@@ -17,7 +18,7 @@ export class FormGenericComponent implements OnInit {
     public newForm: FormGroup = new FormGroup({});
     public errorMessage: string = ''
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private confirmationService: ConfirmationService) {
     }
 
     @ViewChildren(SelectorComponent) selectorViewChildren: QueryList<SelectorComponent>
@@ -80,6 +81,8 @@ export class FormGenericComponent implements OnInit {
     save(formValue, isValid) {
         this.showValidation = true
         if (!isValid) return
+
+        var modalRef= this.confirmationService.openMessageBox('UI.FORM.SAVING MSG')
         var retObj = {}
         this.structure.filter(s => s.isStandard()).forEach(s => {
             var value = formValue[s.name]
@@ -92,7 +95,12 @@ export class FormGenericComponent implements OnInit {
             retObj[s.name] = s.value
         })
         retObj['setError'] = (msg) => { this.errorMessage = msg }
-        retObj['setSuccess'] = (msg) => { this.reset() }
+        retObj['setSuccess'] = (msg) => { 
+            this.reset(); 
+            modalRef.componentInstance.explicationKey= 'UI.FORM.SAVING MSG DONE'
+            setTimeout(() => {modalRef.close()}, 650)
+             
+        }
         this.formSaved.next(retObj)
     }
 

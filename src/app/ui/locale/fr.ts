@@ -21,6 +21,7 @@ export const locale = {
             },
             "MODAL": {
                 "DEFAULT TITLE": "Confirmation",
+                "DEFAULT TITLE INFO": "Information",
                 "DEFAULT QUESTION": "Etes-vous certain? En cas de doute, veuillez annuler."
             },
             "UPLOAD": {
@@ -57,7 +58,9 @@ export const locale = {
                 "NUMBER REQUIRED": "Une valeur numérique est attendue. Pas de texte.",
                 "NUMBER MINIMAL": "Valeur minimale: {{nb}}",
                 "ALREADY IN DB": "Cette entrée existe déjà dans la base de données. Veuillez vérifier si c'est nécessaire de la recréer.",
-                "CHOOSE AN OPTION": "Choisir une option"
+                "CHOOSE AN OPTION": "Choisir une option",
+                "SAVING MSG": "En train de sauver l'enregistrement",
+                "SAVING MSG DONE": "OK! C'est fait!"
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "le format n'est pas valide",

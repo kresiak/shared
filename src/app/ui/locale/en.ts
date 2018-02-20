@@ -21,6 +21,7 @@ export const locale = {
             },
             "MODAL": {
                 "DEFAULT TITLE": "Confirmation",
+                "DEFAULT TITLE INFO": "Information",
                 "DEFAULT QUESTION": "Are you sure? If not, please cancel"
             },
             "UPLOAD": {
@@ -57,7 +58,9 @@ export const locale = {
                 "NUMBER REQUIRED": "A numeric value is expected. No text.",
                 "NUMBER MINIMAL": "Minimum value: {{nb}}",
                 "ALREADY IN DB": "This already exists in the database. Please check if it is necessary to create it.",
-                "CHOOSE AN OPTION": "Choose an option"
+                "CHOOSE AN OPTION": "Choose an option",
+                "SAVING MSG": "Trying to save the record",
+                "SAVING MSG DONE": "OK! Done!"
             },
             "GENERAL": {
                 "FORMAT NOT VALID": "the format is not valid", //as
