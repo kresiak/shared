@@ -17,7 +17,8 @@ export class Editor implements OnInit, AfterViewInit, OnChanges{
     // Creating a host element class attribute binding from the editMode property
     @Input() @HostBinding('class.editor--edit-mode') editMode = false;
     @Input() showControls;
-    @Input() isMonetary: boolean= false;
+    @Input() isMonetary: boolean= false
+    @Input() isEmail: boolean= false
     @Input() currency: string= 'EUR';
     @Input() regexp: string = '.*';
     @Input() timeoutSeconds: number = 5 * 60;
@@ -46,7 +47,15 @@ export class Editor implements OnInit, AfterViewInit, OnChanges{
 
     ngOnInit():void 
     {
-        this.myregexp= new RegExp(this.isMonetary ? '^[+-]?((\\d+(\\.\\d*)?)|(\\.\\d+))$' : this.regexp, 'i')
+        if (this.isMonetary) {
+            this.myregexp= /^[+-]?((\d+(\.\d*)?)|(\.\d+))$/i
+        }
+        else if (this.isEmail) {
+            this.myregexp= /^\s*([0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3})\s*$/i
+        }
+        else {
+            this.myregexp= new RegExp(this.regexp, 'i')
+        }
         this.isValid= this.myregexp.test(this.content)
         this.editableContentElement = this.elementRef.nativeElement.querySelector('.editor__editable-content');
     }
