@@ -141,6 +141,9 @@ export class FormGenericComponent implements OnInit {
                 if (test[0] !== content) {
                     e.preventDefault()
                     e.target.value = test[0]
+                    var obj: any = {}
+                    obj[item.name] = test[0]
+                    this.newForm.patchValue(obj)                        
                 }
             }
         }
