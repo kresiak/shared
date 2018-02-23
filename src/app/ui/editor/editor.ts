@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, AfterViewInit, ViewEncapsulation, EventEmitter, ElementRef, Inject, HostBinding, HostListener } from '@angular/core';
+import { Component, ViewChild, Input, Output, OnInit, OnChanges, AfterViewInit, ViewEncapsulation, EventEmitter, ElementRef, Inject, HostBinding, HostListener } from '@angular/core';
 
 @Component({
     //moduleId: module.id,
@@ -9,64 +9,62 @@ import { Component, Input, Output, OnInit, OnChanges, AfterViewInit, ViewEncapsu
     templateUrl: './editor.html',
     encapsulation: ViewEncapsulation.None
 })
-export class Editor implements OnInit, AfterViewInit, OnChanges{
+export class Editor implements OnInit, AfterViewInit, OnChanges {
+    @ViewChild('t') popup 
+
     // Content that will be edited and displayed
-    @Input() id: string='';
+    @Input() id: string = '';
     @Input() content;
-    @Input() readOnly: boolean= false;    
+    @Input() readOnly: boolean = false;
     // Creating a host element class attribute binding from the editMode property
     @Input() @HostBinding('class.editor--edit-mode') editMode = false;
     @Input() showControls;
-    @Input() isMonetary: boolean= false
-    @Input() isEmail: boolean= false
-    @Input() currency: string= 'EUR';
+    @Input() isMonetary: boolean = false
+    @Input() isEmail: boolean = false
+    @Input() currency: string = 'EUR';
     @Input() regexp: string = '.*';
     @Input() timeoutSeconds: number = 5 * 60;
     @Output() editSaved = new EventEmitter();
     @Output() editSavedWithCancelOption = new EventEmitter();
     @Output() editableInput = new EventEmitter();
     private editableContentElement;
-    private isValid: boolean= true
+    private isValid: boolean = true
     private myregexp: RegExp
 
     // We use ElementRef in order to obtain our editable element for later use
-    constructor( private elementRef:ElementRef) {
-        
+    constructor(private elementRef: ElementRef) {
+
     }
 
-    resetContent(newcontent)
-    {
-        this.content= newcontent;
+    resetContent(newcontent) {
+        this.content = newcontent;
         this.setEditableContent(newcontent);
     }
 
-    ngAfterViewInit():void
-    {
+    ngAfterViewInit(): void {
         this.setEditableContent(this.content);
     }
 
-    ngOnInit():void 
-    {
+    ngOnInit(): void {
         if (this.isMonetary) {
-            this.myregexp= /^[+-]?((\d+(\.\d*)?)|(\.\d+))$/i
+            this.myregexp = /^[+-]?((\d+(\.\d*)?)|(\.\d+))$/i
         }
         else if (this.isEmail) {
-            this.myregexp= /^\s*([0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3})\s*$/i
+            this.myregexp = /^\s*([0-9a-z_.-]+@[0-9a-z.-]+\.[a-z]{2,3})\s*$/i
         }
         else {
-            this.myregexp= new RegExp(this.regexp, 'i')
+            this.myregexp = new RegExp(this.regexp, 'i')
         }
-        this.isValid= this.myregexp.test(this.content)
+        this.isValid = this.myregexp.test(this.content)
         this.editableContentElement = this.elementRef.nativeElement.querySelector('.editor__editable-content');
     }
 
-    ngOnDestroy():void 
-    {
+    ngOnDestroy(): void {
         this.cancelTimer()
-        
+
         if (this.editMode) {
             this.save()
-        }        
+        }
     }
 
     // We need to make sure to reflect to our editable element if content gets updated from outside
@@ -94,12 +92,12 @@ export class Editor implements OnInit, AfterViewInit, OnChanges{
         }
     }
 
-    private timerId= undefined
+    private timerId = undefined
 
     cancelTimer() {
         if (this.timerId) {
             clearTimeout(this.timerId)
-            this.timerId= undefined
+            this.timerId = undefined
         }
     }
 
@@ -107,47 +105,50 @@ export class Editor implements OnInit, AfterViewInit, OnChanges{
     onInput() {
         // Emit a editableInput event with the edited content
         this.editableInput.next(this.getEditableContent());
-        this.isValid= this.myregexp.test(this.getEditableContent())
+        this.isValid = this.myregexp.test(this.getEditableContent())
 
         this.cancelTimer()
 
         if (this.isValid) {
-            this.timerId=  setTimeout(() => {
+            this.timerId = setTimeout(() => {
                 this.save()
-            }, this.timeoutSeconds * 1000)    
-        }        
+            }, this.timeoutSeconds * 1000)
+        }
 
     }
 
     // On save we reflect the content of the editable element into the content field and emit an event
     save() {
-        this.cancelTimer()        
-        var saved= this.content
+        this.cancelTimer()
+        var saved = this.content
         this.content = this.getEditableContent();
         this.editSaved.next(this.content);
         this.editSavedWithCancelOption.next({
             value: this.content,
             fnCancel: () => {
                 this.setEditableContent(saved)
-                this.content= saved
-            } 
+                this.content = saved
+            }
         })
         // Setting editMode to false to switch the editor back to viewing mode
         this.editMode = false;
+        this.popup.close()
     }
 
     // Canceling the edit will not reflect the edited content and switch back to viewing mode
     cancel() {
-        this.cancelTimer()        
+        this.cancelTimer()
         this.setEditableContent(this.content);
         this.editableInput.next(this.getEditableContent());
         this.editMode = false;
+        this.popup.close()
     }
 
 
 
     // The edit method will initialize the editable element and set the component into edit mode
     edit() {
+        if (!this.content) this.popup.open()        
         this.editMode = true;
     }
 }

@@ -1,4 +1,4 @@
-<div (input)="onInput()"
+<div (input)="onInput()" #t="ngbTooltip" [ngbTooltip]="'UI.GENERAL.YOU CAN WRITE' | translate" triggers="manual"
      class="editor__editable-content"
      contenteditable="true"></div>
 <div class="editor__output">{{(isMonetary && +content) ? (content | ggCurrency:currency) : (content || ('UI.GENERAL.NOT SET YET' | translate) ) }}</div>

@@ -79,7 +79,8 @@ export const locale = {
                 "ENTER NEW CHOICE": "Entrer une nouvelle option...",
                 "PLEASE CHOOSE": "Veuillez choisir",
                 "ADD THE CHOICE": "Ajouter l'option",
-                "CHOOSE COUNTRY": "Choisir un pays"
+                "CHOOSE COUNTRY": "Choisir un pays",
+                "YOU CAN WRITE":"Ecrivez et puis confirmez (V vert) ou annuler"
             }
 
 
