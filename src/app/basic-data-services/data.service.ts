@@ -108,23 +108,23 @@ export class DataStore { // contains one observable property by database table/c
     // Trigger database query
     // ======================
 
+    private collectionsUsedMap: Map<string, any>= new Map<string, any>()
+
     public RetriggerAll() {
-        Object.keys(this).forEach(propName => {
-            if (this[propName] instanceof ReplaySubject && propName != 'laboNameSubject') {
-                this.triggerNext(propName)
-            }
+        this.collectionsUsedMap.forEach((value, key) => {
+            this.triggerNext(key)
         })
     }
 
     private triggerNext(table: string) {
-        if (!this[table]) {
-            this[table] = new ReplaySubject<any[]>(1);
+        if (!this.collectionsUsedMap.has(table)) {
+            this.collectionsUsedMap.set(table, new ReplaySubject<any[]>(1))
         }
 
         this.apiService.crudGetRecords(table).subscribe(
             res => {
                 var res2 = res.filter(record => this.isFromRightLabo(table, record))
-                this[table].next(res2);
+                this.collectionsUsedMap.get(table).next(res2)
             },
             err => console.log("Error retrieving Todos"),
             () => console.log("completed " + table)
@@ -140,11 +140,11 @@ export class DataStore { // contains one observable property by database table/c
     
     getDataObservable(table: string): Observable<any[]> {
         var getObservable= (table: string): Observable<any[]> => {
-            if (!this[table]) {
-                this[table] = new ReplaySubject<any[]>(1);
+            if (!this.collectionsUsedMap.has(table)) {
+                //console.log('akak')
                 this.triggerNext(table);
             }
-            return this[table];
+            return this.collectionsUsedMap.get(table)
         }
             
         return getObservable(table);
