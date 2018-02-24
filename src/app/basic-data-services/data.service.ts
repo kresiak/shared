@@ -9,14 +9,16 @@ import { ApiService } from './api.service';
 
 export class DataStore { // contains one observable property by database table/collection
 
-    public KRINO: string= 'KRINO'
-    public EURISKO: string= 'EURISKO'
-    public SCREENS: string= 'SCREENS'
+    public KRINO: string = 'KRINO'
+    public EURISKO: string = 'EURISKO'
+    public SCREENS: string = 'SCREENS'
+    public EQUIPMENTS: string = 'EQUIPMENTS'
 
-    private applicationId: string= undefined
+    private applicationId: string = undefined
 
     constructor(private apiService: ApiService) {
         console.log('datastore constructor')
+        this.initCollectionsInfo()
 
         this.laboName = 'undefined'
         var laboFromLS = localStorage.getItem(this.LSLaboKey)
@@ -26,15 +28,39 @@ export class DataStore { // contains one observable property by database table/c
         this.emitLaboName()
     }
 
-    public setApplication(appId: string){
-        this.applicationId= appId
+    public setApplication(appId: string) {
+        this.applicationId = appId
+    }
+
+    private collectionsConfigMap: Map<string, any> = new Map<string, any>()
+
+    private initCollectionsInfo() {
+        var addCol = (name: string, isLaboNeutral: boolean = true, applicationList: string[] = []) => {
+            this.collectionsConfigMap.set(name, new CollectionInfo(name, isLaboNeutral, applicationList))
+        }
+
+        var addKrinoNonSpecific = (name) => addCol(name, true, [this.KRINO]);
+        var addEuriskoNonSpecific = (name) => addCol(name, true, [this.EURISKO]);
+        var addEquipmentNonSpecific = (name) => addCol(name, true, [this.EQUIPMENTS]);
+        var addScreensNonSpecific = (name) => addCol(name, true, [this.SCREENS]);
+
+        ['products', 'suppliers', 'categories', 'labos.list', 'otp.product.classifications', 'sap.engage', 'sap.fusion', 'sap.supplier', 'sap.engage.map',
+        'users.public', 'products.market', 'platform.enterprises', 'platform.clients', 'currencies', 
+        'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos'].forEach(addKrinoNonSpecific);
+
+        ['users.eurisko', 'job.request', 'job.response', 'job.publicationChannels', 'dashlets.eurisko'].forEach(addEuriskoNonSpecific);
+
+        ['equipments'].forEach(addEquipmentNonSpecific);
+
+        ['screens.images', 'screens.screens', 'screens.sequences'].forEach(addScreensNonSpecific);
+
     }
 
     // Labo name stuff
     // ================
 
     private laboNameSubject: ReplaySubject<string> = new ReplaySubject(1)
-    private laboName: string = 'undefined' 
+    private laboName: string = 'undefined'
 
     private LSLaboKey: string = 'krinoLabo'  // this is for local storage
     private laboFieldName: string = 'laboName'  // labo field name in database
@@ -53,11 +79,11 @@ export class DataStore { // contains one observable property by database table/c
         this.RetriggerAll()
         this.emitLaboName()
     }
-    
+
     private emitLaboName() {
         this.laboNameSubject.next(this.laboName === 'undefined' ? '' : this.laboName)
     }
-    
+
     public getLaboObservable(): Observable<any> {
         return this.getLaboNameObservable().switchMap(laboName => {
             return this.getDataObservable('labos.list').map(labos => labos.filter(labo => labo.shortcut === laboName)[0])
@@ -68,18 +94,11 @@ export class DataStore { // contains one observable property by database table/c
         return this.getLaboObservable().map(theLabo => theLabo ? (theLabo.responsables || []) : [])
     }
 
-    private universalTables: string[] = ['products', 'suppliers', 'categories', 'labos.list', 'otp.product.classifications', 'sap.engage', 'sap.fusion', 'sap.supplier', 'sap.engage.map', 'users.public',
-        'products.market', 'platform.enterprises', 'platform.clients', 'currencies', 'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos',
-        'users.eurisko', 'job.request', 'job.response', 'job.publicationChannels', 'dashlets.eurisko',
-        'equipments'
-    ]  
-
     private isFromRightLabo(table: string, rec): boolean {
         let laboNameInRecord = rec[this.laboFieldName]
 
-        if ((this.universalTables.includes(table) || table.includes('xenia') || table.startsWith('screens.')) && !rec.isLabo) return true
+        if (this.collectionsConfigMap.has(table) && this.collectionsConfigMap.get(table).isLaboNeutral && !rec.isLabo) return true
 
-        if (this.laboName === 'michel') return !laboNameInRecord || laboNameInRecord === this.laboName
         return laboNameInRecord === this.laboName
     }
 
@@ -87,7 +106,7 @@ export class DataStore { // contains one observable property by database table/c
         record[this.laboFieldName] = this.laboName
     }
 
-    
+
     // Pictures stuff
     // ==============
 
@@ -108,7 +127,7 @@ export class DataStore { // contains one observable property by database table/c
     // Trigger database query
     // ======================
 
-    private collectionsUsedMap: Map<string, any>= new Map<string, any>()
+    private collectionsUsedMap: Map<string, any> = new Map<string, any>()
 
     public RetriggerAll() {
         this.collectionsUsedMap.forEach((value, key) => {
@@ -137,16 +156,16 @@ export class DataStore { // contains one observable property by database table/c
 
     // Data observables
     // ================
-    
+
     getDataObservable(table: string): Observable<any[]> {
-        var getObservable= (table: string): Observable<any[]> => {
+        var getObservable = (table: string): Observable<any[]> => {
             if (!this.collectionsUsedMap.has(table)) {
-                //console.log('akak')
+                //console.log('xxxa')
                 this.triggerNext(table);
             }
             return this.collectionsUsedMap.get(table)
         }
-            
+
         return getObservable(table);
     }
 
@@ -217,6 +236,16 @@ export class DataStore { // contains one observable property by database table/c
             })
         })
     }
+}
 
+class CollectionInfo {
+    public name: string
+    public isLaboNeutral: boolean
+    public applicationList: string[] = []
 
+    constructor(name: string, isLaboNeutral: boolean = true, applicationList: string[] = []) {
+        this.name = name
+        this.isLaboNeutral = isLaboNeutral
+        this.applicationList = applicationList
+    }
 }
