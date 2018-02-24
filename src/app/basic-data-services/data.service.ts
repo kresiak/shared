@@ -9,6 +9,12 @@ import { ApiService } from './api.service';
 
 export class DataStore { // contains one observable property by database table/collection
 
+    public KRINO: string= 'KRINO'
+    public EURISKO: string= 'EURISKO'
+    public SCREENS: string= 'SCREENS'
+
+    private applicationId: string= undefined
+
     constructor(private apiService: ApiService) {
         console.log('datastore constructor')
 
@@ -20,49 +26,70 @@ export class DataStore { // contains one observable property by database table/c
         this.emitLaboName()
     }
 
+    public setApplication(appId: string){
+        this.applicationId= appId
+    }
+
+    // Labo name stuff
+    // ================
+
     private laboNameSubject: ReplaySubject<string> = new ReplaySubject(1)
+    private laboName: string = 'undefined' 
+
+    private LSLaboKey: string = 'krinoLabo'  // this is for local storage
+    private laboFieldName: string = 'laboName'  // labo field name in database
 
     public getLaboNameObservable(): Observable<any> {
         return this.laboNameSubject
     }
 
+    public getLaboName(): string {
+        return this.laboName
+    }
+
+    public setLaboName(labo: string) {
+        this.laboName = labo ? labo : 'undefined'
+        localStorage.setItem(this.LSLaboKey, labo)
+        this.RetriggerAll()
+        this.emitLaboName()
+    }
+    
+    private emitLaboName() {
+        this.laboNameSubject.next(this.laboName === 'undefined' ? '' : this.laboName)
+    }
+    
     public getLaboObservable(): Observable<any> {
         return this.getLaboNameObservable().switchMap(laboName => {
             return this.getDataObservable('labos.list').map(labos => labos.filter(labo => labo.shortcut === laboName)[0])
         })
     }
 
-
-
     public getLaboResponsablesObservable(): Observable<any> {
         return this.getLaboObservable().map(theLabo => theLabo ? (theLabo.responsables || []) : [])
-/*        return this.getLaboNameObservable().switchMap(laboName => {
-            return this.getDataObservable('labos.list').map(labos => labos.filter(labo => labo.shortcut === laboName)[0])
-                        .map(theLabo => theLabo ? (theLabo.responsables || []) : [])
-        })
-*/    }
-
-    private emitLaboName() {
-        this.laboNameSubject.next(this.laboName === 'undefined' ? '' : this.laboName)
     }
-
-    private laboFieldName: string = 'laboName'
 
     private universalTables: string[] = ['products', 'suppliers', 'categories', 'labos.list', 'otp.product.classifications', 'sap.engage', 'sap.fusion', 'sap.supplier', 'sap.engage.map', 'users.public',
         'products.market', 'platform.enterprises', 'platform.clients', 'currencies', 'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos',
         'users.eurisko', 'job.request', 'job.response', 'job.publicationChannels', 'dashlets.eurisko',
         'equipments'
-    ]
-    
-    //public laboName= 'demo' 
-    //public laboName = 'michel'
-    private laboName: string = 'undefined' // = 'genomics'
-    private LSLaboKey: string = 'krinoLabo'
+    ]  
 
+    private isFromRightLabo(table: string, rec): boolean {
+        let laboNameInRecord = rec[this.laboFieldName]
 
-    public getLaboName(): string {
-        return this.laboName
+        if ((this.universalTables.includes(table) || table.includes('xenia') || table.startsWith('screens.')) && !rec.isLabo) return true
+
+        if (this.laboName === 'michel') return !laboNameInRecord || laboNameInRecord === this.laboName
+        return laboNameInRecord === this.laboName
     }
+
+    setLaboNameOnRecord(record) {
+        record[this.laboFieldName] = this.laboName
+    }
+
+    
+    // Pictures stuff
+    // ==============
 
     public getPictureUrl(filename: string) {
         if (!filename) return undefined
@@ -77,22 +104,9 @@ export class DataStore { // contains one observable property by database table/c
         return this.apiService.getPictureUrlBase()
     }
 
-    public setLaboName(labo: string) {
-        this.laboName = labo ? labo : 'undefined'
-        localStorage.setItem(this.LSLaboKey, labo)
-        this.RetriggerAll()
-        this.emitLaboName()
-    }
 
-    private isFromRightLabo(table: string, rec): boolean {
-        let laboNameInRecord = rec[this.laboFieldName]
-
-        if ((this.universalTables.includes(table) || table.includes('xenia') || table.startsWith('screens.')) && !rec.isLabo) return true
-
-        if (this.laboName === 'michel') return !laboNameInRecord || laboNameInRecord === this.laboName
-        return laboNameInRecord === this.laboName
-    }
-
+    // Trigger database query
+    // ======================
 
     public RetriggerAll() {
         Object.keys(this).forEach(propName => {
@@ -117,20 +131,23 @@ export class DataStore { // contains one observable property by database table/c
         );
     }
 
-    setLaboNameOnRecord(record) {
-        record[this.laboFieldName] = this.laboName
+    triggerDataNext(table: string) {
+        this.triggerNext(table);
     }
 
-    private getObservable(table: string): Observable<any[]> {
-        if (!this[table]) {
-            this[table] = new ReplaySubject<any[]>(1);
-            this.triggerNext(table);
-        }
-        return this[table];
-    }
-
+    // Data observables
+    // ================
+    
     getDataObservable(table: string): Observable<any[]> {
-        return this.getObservable(table);
+        var getObservable= (table: string): Observable<any[]> => {
+            if (!this[table]) {
+                this[table] = new ReplaySubject<any[]>(1);
+                this.triggerNext(table);
+            }
+            return this[table];
+        }
+            
+        return getObservable(table);
     }
 
     addData(table: string, newRecord: any): Observable<any> {
@@ -167,9 +184,8 @@ export class DataStore { // contains one observable property by database table/c
         return obs;
     }
 
-    triggerDataNext(table: string) {
-        this.triggerNext(table);
-    }
+    // database utility
+    // ================
 
     // For example: equipe records contain the list of user Ids... If you want to update the list of users for an equipe, it is easy. But if you want to update the list of equipes for a user? This can be used...
 
