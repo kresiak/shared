@@ -23,6 +23,7 @@ export class WebSocketService{
             let obj= JSON.parse(data)
             if (obj && obj.collectionsUpdated){
                 (obj.collectionsUpdated as any[]).forEach(collection => {
+                    console.log("web socket update request", collection)
                     this.dataStore.triggerDataNext(collection)
                 })
             }
