@@ -1,5 +1,4 @@
 import { Component, Input, Output, OnInit, OnChanges, ViewEncapsulation, EventEmitter, HostBinding } from '@angular/core';
-import { SelectableData } from '../../basic-code/index';
 
 @Component({
     //moduleId: module.id,
