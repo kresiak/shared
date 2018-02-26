@@ -13,6 +13,7 @@ export class SelectorDropdownComponent implements OnInit, OnChanges {
     // @Input() readOnly: boolean= false;    
     @Input() selectedValue;
     @Input() selectableOptions : any[];
+    @Input() readOnly = false;
     @Input() @HostBinding('class.editor--edit-mode') editMode = false;
     @Output() selectionSaved = new EventEmitter();
 
