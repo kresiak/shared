@@ -1,0 +1,17 @@
+
+<div class="editor__editable-content">
+    <select [disabled]="!editMode" [value]="selectedValueEdited" (change)="setSelection($event.target.value)">
+        <option *ngFor="let option of selectableOptions" [value]="option.id">{{option.name | translate}}</option>
+    </select>
+</div>
+
+
+<div class="editor__output">{{getName(selectedValue) | translate}}</div>
+<div *ngIf="!readOnly && !editMode" class="editor__controls">
+    <button (click)="edit()" class="editor__icon-edit"></button>
+</div>
+<div *ngIf="!readOnly && editMode" class="editor__controls">
+    <button (click)="save()" class="editor__icon-save"></button>
+    <button (click)="cancel()" class="editor__icon-cancel"></button>
+</div>
+

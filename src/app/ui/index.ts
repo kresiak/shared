@@ -24,6 +24,7 @@ import { EditorTinyMce } from './editor/editor-tnymce'
 
 import { SelectorComponent } from './selector/selector.component'
 import { SelectorDateTimeComponent } from './selector/selector-date-time.component'
+import { SelectorDropdownComponent } from './selector/selector-dropdown.component'
 
 import { HelpPointerComponent } from './help/help-pointer.component'
 import { DatePointerComponent } from './help/date-pointer.component'
@@ -70,7 +71,7 @@ import { locale as french } from './locale/fr'
     HelpPointerComponent, DatePointerComponent, TextCompactComponent, 
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
-    SelectorDateTimeComponent,
+    SelectorDateTimeComponent, SelectorDropdownComponent,
     FormGenericComponent
   ],
   exports: [
@@ -82,7 +83,7 @@ import { locale as french } from './locale/fr'
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, GigaCurrencyPipe,
     ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
-    SelectorDateTimeComponent,
+    SelectorDateTimeComponent, SelectorDropdownComponent,
     FormGenericComponent
   ],
   providers: [],
