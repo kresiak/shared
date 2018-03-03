@@ -51,6 +51,7 @@ export const locale = {
             "FORM": {
                 "SUBMIT": "Envoyer",
                 "RESET": "Réinitialiser",
+                "REUSE": "Réutiliser les dernières valeurs",
                 "REQUIRED": "Information obligatoire!",
                 "MIN CHAR REQUIRED": "Au moins {{nb}} caractère(s).",
                 "TEL FORMAT ERROR": "Doit contenir seulement des chiffres (au moins 7), sans espaces. Doit commencer par '+' ou '0'",

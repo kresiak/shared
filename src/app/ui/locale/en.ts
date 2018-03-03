@@ -51,6 +51,7 @@ export const locale = {
             "FORM": {
                 "SUBMIT": "Submit", 
                 "RESET": "Reset",
+                "REUSE": "Use again last values",
                 "REQUIRED": "Required information!",
                 "MIN CHAR REQUIRED": "At least {{nb}} characters.",
                 "TEL FORMAT ERROR": "Must be composed of at least 7 numbers, without spaces. May start by '+'or '0'",

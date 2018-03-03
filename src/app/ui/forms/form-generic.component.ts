@@ -31,6 +31,7 @@ export class FormGenericComponent implements OnInit {
     @Input() dataColumns: number = 4
     @Input() primaryControlName: string = 'name'
     @Input() primaryDataObservable: Observable<any> = undefined
+    @Input() cannotRecreatePrimary:boolean = true
     @Output() formSaved = new EventEmitter()
 
     @Output() gigaControlChanged = new EventEmitter()
@@ -41,7 +42,7 @@ export class FormGenericComponent implements OnInit {
 
     public isPageRunning: boolean = true
 
-
+    private mapValues: Map<string, any> = new Map<string, any>()
 
     ngOnInit(): void {
         const telRegex = /^\s*[\+0]{1}[0-9]{7,20}\s*$/im
@@ -82,7 +83,7 @@ export class FormGenericComponent implements OnInit {
         this.showValidation = true
         if (!isValid) return
 
-        var modalRef= this.confirmationService.openMessageBox('UI.FORM.SAVING MSG')
+        var modalRef = this.confirmationService.openMessageBox('UI.FORM.SAVING MSG')
         var retObj = {}
         this.structure.filter(s => s.isStandard()).forEach(s => {
             var value = formValue[s.name]
@@ -95,11 +96,14 @@ export class FormGenericComponent implements OnInit {
             retObj[s.name] = s.value
         })
         retObj['setError'] = (msg) => { this.errorMessage = msg }
-        retObj['setSuccess'] = (msg) => { 
-            this.reset(); 
-            modalRef.componentInstance.explicationKey= 'UI.FORM.SAVING MSG DONE'
-            setTimeout(() => {modalRef.close()}, 650)
-             
+        retObj['setSuccess'] = (msg) => {
+            this.mapValues.clear()
+            this.structure.filter(s => s.isStandard()).forEach(s => this.mapValues.set(s.name, formValue[s.name]))
+            this.structure.filter(s => !s.isStandard()).forEach(s => this.mapValues.set(s.name, s.value))
+            this.reset();
+            modalRef.componentInstance.explicationKey = 'UI.FORM.SAVING MSG DONE'
+            setTimeout(() => { modalRef.close() }, 650)
+
         }
         this.formSaved.next(retObj)
     }
@@ -108,8 +112,27 @@ export class FormGenericComponent implements OnInit {
         this.showValidation = false
         this.selectorViewChildren.toArray().forEach(s => s.emptyContent())
         this.datesViewChildren.toArray().forEach(s => s.emptyContent())
+        this.structure.filter(s => !s.isStandard()).forEach(s => s.value= undefined)        
         this.newForm.reset();
         this.initCheck()
+    }
+
+    canReuse() {
+        return this.mapValues.size > 0
+    }
+
+    reuse() {
+        this.structure.filter(s => s.isStandard()).forEach(s => {
+            var control = this.newForm.controls[s.name]
+            if (control && this.mapValues.has(s.name)) {
+                control.setValue(this.mapValues.get(s.name))
+            }
+        })
+        this.structure.filter(s => !s.isStandard()).forEach(s => {
+            if (this.mapValues.has(s.name)) {
+                s.value= this.mapValues.get(s.name)
+            }
+        })
     }
 
     isInvalid(controlName): boolean {
@@ -143,7 +166,7 @@ export class FormGenericComponent implements OnInit {
                     e.target.value = test[0]
                     var obj: any = {}
                     obj[item.name] = test[0]
-                    this.newForm.patchValue(obj)                        
+                    this.newForm.patchValue(obj)
                 }
             }
         }
