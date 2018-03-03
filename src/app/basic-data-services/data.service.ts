@@ -4,7 +4,6 @@ import { Observable, Subscription } from 'rxjs/Rx'
 
 import { ApiService } from './api.service';
 
-
 @Injectable()
 
 export class DataStore { // contains one observable property by database table/collection
@@ -15,6 +14,8 @@ export class DataStore { // contains one observable property by database table/c
     public EQUIPMENTS: string = 'EQUIPMENTS'
 
     private applicationId: string = undefined
+
+    // Todo (ak 25/02/2018) if that mess with initializing laboName to string 'undefined' (instead of undefined) is really necessary. Now I won't take the risk to change it (maybe due to records with laboName='undefined' in the DB)
 
     constructor(private apiService: ApiService) {
         console.log('datastore constructor')
@@ -28,8 +29,19 @@ export class DataStore { // contains one observable property by database table/c
         this.emitLaboName()
     }
 
+    private extraTestFunction = (table) => true
+
     public setApplication(appId: string) {
         this.applicationId = appId
+
+        if (appId === this.KRINO) {
+            this.extraTestFunction = (table) => {
+                return this.isLaboNameSet() || table === 'labos.list'
+            }
+            if (this.isLaboNameSet()) {
+                this.RetriggerAll()
+            }
+        }
     }
 
     private collectionsConfigMap: Map<string, any> = new Map<string, any>()
@@ -39,14 +51,19 @@ export class DataStore { // contains one observable property by database table/c
             this.collectionsConfigMap.set(name, new CollectionInfo(name, isLaboNeutral, applicationList))
         }
 
+        var addKrinoSpecific = (name) => addCol(name, false, [this.KRINO]);
+
         var addKrinoNonSpecific = (name) => addCol(name, true, [this.KRINO]);
         var addEuriskoNonSpecific = (name) => addCol(name, true, [this.EURISKO]);
         var addEquipmentNonSpecific = (name) => addCol(name, true, [this.EQUIPMENTS]);
         var addScreensNonSpecific = (name) => addCol(name, true, [this.SCREENS]);
 
         ['products', 'suppliers', 'categories', 'labos.list', 'otp.product.classifications', 'sap.engage', 'sap.fusion', 'sap.supplier', 'sap.engage.map',
-        'users.public', 'products.market', 'platform.enterprises', 'platform.clients', 'currencies', 
-        'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos'].forEach(addKrinoNonSpecific);
+            'users.public', 'products.market', 'platform.enterprises', 'platform.clients', 'currencies',
+            'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos'].forEach(addKrinoNonSpecific);
+
+        ['basket', 'dashlets', 'equipes', 'equipes.gifts', 'equipes.groups', 'labos', 'messages', 'orders', 'orders.eproc', 'orders.fridge', 'orders.reception', 'orders.log',
+            'orders.stock', 'orders.vouchers', 'otps', 'products.stock', 'products.stockage', 'users.krino', 'sap.krino.annotations', 'admin.monitor'].forEach(addKrinoSpecific);
 
         ['users.eurisko', 'job.request', 'job.response', 'job.publicationChannels', 'dashlets.eurisko'].forEach(addEuriskoNonSpecific);
 
@@ -54,6 +71,10 @@ export class DataStore { // contains one observable property by database table/c
 
         ['screens.images', 'screens.screens', 'screens.sequences'].forEach(addScreensNonSpecific);
 
+    }
+
+    private isLaboNeutral(table): boolean {
+        return this.collectionsConfigMap.has(table) && this.collectionsConfigMap.get(table).isLaboNeutral
     }
 
     // Labo name stuff
@@ -73,11 +94,13 @@ export class DataStore { // contains one observable property by database table/c
         return this.laboName
     }
 
-    public setLaboName(labo: string) {
+    public setLaboName(labo: string, fnWhenDone= () => {}) {
         this.laboName = labo ? labo : 'undefined'
         localStorage.setItem(this.LSLaboKey, labo)
-        this.RetriggerAll()
-        this.emitLaboName()
+        this.RetriggerAll(() => {
+            this.emitLaboName()
+            fnWhenDone()
+        })
     }
 
     private emitLaboName() {
@@ -95,9 +118,10 @@ export class DataStore { // contains one observable property by database table/c
     }
 
     private isFromRightLabo(table: string, rec): boolean {
+
         let laboNameInRecord = rec[this.laboFieldName]
 
-        if (this.collectionsConfigMap.has(table) && this.collectionsConfigMap.get(table).isLaboNeutral && !rec.isLabo) return true
+        if (this.isLaboNeutral(table) && !rec.isLabo) return true
 
         return laboNameInRecord === this.laboName
     }
@@ -106,6 +130,9 @@ export class DataStore { // contains one observable property by database table/c
         record[this.laboFieldName] = this.laboName
     }
 
+    private isLaboNameSet() {
+        return this.laboName && this.laboName !== 'undefined'
+    }
 
     // Pictures stuff
     // ==============
@@ -129,30 +156,79 @@ export class DataStore { // contains one observable property by database table/c
 
     private collectionsUsedMap: Map<string, any> = new Map<string, any>()
 
-    public RetriggerAll() {
-        this.collectionsUsedMap.forEach((value, key) => {
-            this.triggerNext(key)
-        })
-    }
-
-    private triggerNext(table: string) {
+    private getCollectionSubject = (table): ReplaySubject<any[]> => {
         if (!this.collectionsUsedMap.has(table)) {
             this.collectionsUsedMap.set(table, new ReplaySubject<any[]>(1))
         }
+        return this.collectionsUsedMap.get(table)
+    }
 
-        this.apiService.crudGetRecords(table).subscribe(
-            res => {
-                var res2 = res.filter(record => this.isFromRightLabo(table, record))
-                this.collectionsUsedMap.get(table).next(res2)
-            },
-            err => console.log("Error retrieving Todos"),
-            () => console.log("completed " + table)
-        );
+    public RetriggerAll(fnWhenDone= () => {}) {
+        console.log('entering retrigger all')
+        var triggerForApplication = (appId, entryTable) => {
+            if (this.isLaboNameSet()) {
+                var collections = Array.from(this.collectionsConfigMap.values()).filter((c: CollectionInfo) => c.applicationList.includes(appId)).map((c: CollectionInfo) => c.name)
+                if (collections.length > 0) {
+                    collections.forEach(collection => this.getCollectionSubject(collection)) // prepare the subject...  so that get Requests (before we get an answer of this) is not querying the server
+                    var record = {
+                        collections: collections
+                    }
+                    this.apiService.callWebService('getCollections', record).subscribe((results: any[]) => {
+                        results.forEach(result => {                               
+                            var table = result.name
+                            var res2 = result.data.filter(record => this.isFromRightLabo(table, record))
+                            this.getCollectionSubject(table).next(res2)
+                        })
+                        fnWhenDone()
+                    },
+                        err => console.log("Error retrieving ", collections.reduce((a, b) => a + ', ' + b)),
+                        () => console.log("completed retrigger all", collections.reduce((a, b) => a + ', ' + b)))
+                }
+            }
+            else {
+                this.collectionsUsedMap.forEach((value, key) => {
+                    if (key !== entryTable) {
+                        value.next([])
+                    }
+                    fnWhenDone()
+                })
+                console.log("completed retrigger all empty")
+            }
+        }
+
+        if (this.applicationId === this.KRINO) {
+            triggerForApplication(this.KRINO, 'labos.list')
+        }
+        else {
+            this.collectionsUsedMap.forEach((value, key) => {
+                this.triggerNext(key)
+            })
+        }
+    }
+
+    private triggerNext(table: string) {
+        var subject= this.getCollectionSubject(table)
+
+        if (this.extraTestFunction(table) && (this.isLaboNameSet() || this.isLaboNeutral(table))) {
+            this.apiService.crudGetRecords(table).subscribe(
+                res => {
+                    var res2 = res.filter(record => this.isFromRightLabo(table, record))
+                    subject.next(res2)
+                },
+                err => console.log("Error retrieving Todos"),
+                () => console.log("completed " + table)
+            )
+        }
+        else {
+            subject.next([])
+        }
     }
 
     triggerDataNext(table: string) {
         this.triggerNext(table);
     }
+
+
 
     // Data observables
     // ================
@@ -160,7 +236,7 @@ export class DataStore { // contains one observable property by database table/c
     getDataObservable(table: string): Observable<any[]> {
         var getObservable = (table: string): Observable<any[]> => {
             if (!this.collectionsUsedMap.has(table)) {
-                //console.log('xxxa')
+                console.log('I want', table)
                 this.triggerNext(table);
             }
             return this.collectionsUsedMap.get(table)
