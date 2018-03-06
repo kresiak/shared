@@ -3,7 +3,11 @@
     value-property-name="id" display-property-name="name"> -->
 
 <input type="text" class="editor__editable-content form-control" [ngModel]="selectedItem" [ngbTypeahead]="search" (selectItem)="onSelected($event)"
-      [inputFormatter]="formatter" [resultFormatter]="formatter" (click)="onclick()" [ngbTooltip]="'UI.CLICKER TEXTE' | translate" >     
+      [inputFormatter]="formatter" [resultFormatter]="formatter" [ngbTooltip]="'UI.CLICKER TEXTE' | translate" 
+      (focus)="focus$.next($event.target.value)"
+      (click)="click$.next($event.target.value)"
+      #instance="ngbTypeahead"            
+      >     
 
 <div class="editor__output imgSearch" (click)="clicked()" *ngIf="linkable" >{{content}}</div>
 <div class="editor__output" *ngIf="!linkable" >{{content}}</div>

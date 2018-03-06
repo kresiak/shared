@@ -24,6 +24,8 @@ export class EditorAutocomplete implements OnInit {
     @Input() linkable: boolean = false
     @Input() timeoutSeconds: number = 5 * 60;
 
+    @ViewChild('instance') instance: NgbTypeahead;    
+    
     @Input() @HostBinding('class.editor--edit-mode') editMode = false;
     @Output() idChanged = new EventEmitter();
     @Output() hasBeenClicked = new EventEmitter();
@@ -42,13 +44,16 @@ export class EditorAutocomplete implements OnInit {
         });
     }
 
-    click$ = new Subject<string>();
+    focus$ = new Subject<string>();
+    click$ = new Subject<string>();    
 
     search = (text$: Observable<string>) =>
         text$
             .debounceTime(200).distinctUntilChanged()
+            .merge(this.focus$)
+            .merge(this.click$.filter(() => !this.instance.isPopupOpen()))            
             .switchMap((term: string) => {
-                return this.selectableData.map(sd => !term ? sd : sd.filter(item => item.name.toLowerCase().includes(term.toLowerCase())).slice(0, 10))
+                return this.selectableData.map(sd => !term ? sd.slice(0, 10) : sd.filter(item => item.name.toLowerCase().includes(term.toLowerCase())).slice(0, 10))
             })
             //.do(x => console.log(x))
 
