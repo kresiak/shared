@@ -36,7 +36,7 @@ export class DataStore { // contains one observable property by database table/c
 
         if (appId === this.KRINO) {
             this.extraTestFunction = (table) => {
-                return this.isLaboNameSet() || table === 'labos.list'
+                return this.isLaboNameSet() || ['labos.list', 'users.giga', 'users.giga.functions', 'users.giga.functions.new', 'users.giga.thematic.units', 'users.giga.teams', 'users.giga.labos'].includes(table)
             }
             if (this.isLaboNameSet()) {
                 this.RetriggerAll()
