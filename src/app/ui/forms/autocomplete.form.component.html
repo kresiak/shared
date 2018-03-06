@@ -1,0 +1,6 @@
+<input type="text" class="form-control" [ngbTypeahead]="searchFn" (selectItem)="optionSelected($event)" [ngModel]="selectedItem" (input)="onTypeText($event.target.value)"
+[inputFormatter]="formatter" [resultFormatter]="formatter" [editable]="editable" [ngbTooltip]="'UI.CLICKER TEXTE' | translate" placeholder="{{placeholderKey | translate}}"
+(focus)="focus$.next($event.target.value)"
+(click)="click$.next($event.target.value)"
+#instance="ngbTypeahead"
+>

@@ -53,6 +53,7 @@ import { SigninEnterComponent } from './login/signin-enter.component'
 import { ConfirmationService} from './confirmation/confirmation.service'
 
 import { FormGenericComponent } from './forms/form-generic.component'
+import { AutoCompleteForFormsComponent } from './forms/autocomplete.form.component'
 
 import { locale as english } from './locale/en'
 import { locale as french } from './locale/fr'
@@ -72,7 +73,7 @@ import { locale as french } from './locale/fr'
     FullDatePipe, ShortDatePipe, FromNowPipe, CompactDatePipe, ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent, GigaCurrencyPipe,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
     SelectorDateTimeComponent, SelectorDropdownComponent,
-    FormGenericComponent
+    FormGenericComponent, AutoCompleteForFormsComponent
   ],
   exports: [
     MainHeaderComponent, MenuComponent,
@@ -84,7 +85,7 @@ import { locale as french } from './locale/fr'
     ModalConfirmComponent, ModalMessageComponent, ImageUploaderComponent, ImageUploaderViewerComponent,
     FocusDirective, SigninEnterComponent, LinesTooltipComponent,
     SelectorDateTimeComponent, SelectorDropdownComponent,
-    FormGenericComponent
+    FormGenericComponent, AutoCompleteForFormsComponent
   ],
   providers: [],
   entryComponents: [
