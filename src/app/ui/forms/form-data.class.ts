@@ -39,6 +39,7 @@ export enum FormItemType {
     InputText = 0,
     InputCheckbox = 1,
     InputNumber = 2,
+    Countries= 11,
     GigaSelector = 21,
     GigaDate = 22,
     GigaCountry = 23,

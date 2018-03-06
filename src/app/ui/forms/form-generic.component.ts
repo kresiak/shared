@@ -5,6 +5,7 @@ import { SelectorComponent } from '../selector/selector.component'
 import { EditorDate } from '../editor/editor-date'
 import { Observable } from 'rxjs/Observable';
 import { ConfirmationService } from '../confirmation/confirmation.service'
+import { countries } from '../utils/lists'
 
 @Component(
     {
@@ -171,4 +172,9 @@ export class FormGenericComponent implements OnInit {
             }
         }
     }
+
+    getCountries() {
+        return countries
+    }
+
 }
